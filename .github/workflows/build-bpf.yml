@@ -1,0 +1,38 @@
+name: Build Anchor BPF
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Rust nightly
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+
+      - name: Install Solana CLI & BPF SDK
+        run: |
+          curl -sSfL https://release.solana.com/v1.18.26/install/solana-install-init.sh \
+            | sh -s v1.18.26
+          source ~/.profile
+
+      - name: Install Anchor CLI
+        run: cargo install --locked anchor-cli --version 0.31.1
+
+      - name: Build Anchor program
+        run: anchor build
+
+      - name: Upload BPF artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ikiru-so
+          path: target/deploy/ikiru.so
