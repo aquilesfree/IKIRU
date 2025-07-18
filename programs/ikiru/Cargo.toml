@@ -1,0 +1,16 @@
+[package]
+name = "ikiru"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+anchor-lang = "0.31.1"
+solana-program = "=1.18.18"
+
+[lib]
+name = "ikiru"
+crate-type = ["cdylib"]
+
+[package.metadata.anchor]
+program_id = "B2Tr6Ptp2LeMM68BGWa8YxHbrhCAoTQpr6VwFEoVV1mi"
+

