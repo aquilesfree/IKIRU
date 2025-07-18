@@ -25,8 +25,13 @@ jobs:
             | sh -s v1.18.26
           source ~/.profile
 
-      - name: Install Anchor CLI
-        run: cargo install --locked anchor-cli --version 0.31.1
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Anchor CLI via npm
+        run: npm install -g @coral-xyz/anchor-cli@0.31.1
 
       - name: Build Anchor program
         run: anchor build
