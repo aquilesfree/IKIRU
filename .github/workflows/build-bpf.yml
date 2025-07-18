@@ -40,4 +40,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ikiru-so
-          path: target/deploy/*.so
+          path: |
+            target/deploy/*.so
+            programs/ikiru/target/deploy/*.so
+
