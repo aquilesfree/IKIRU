@@ -32,7 +32,8 @@ jobs:
         run: anchor build
 
       - name: Upload BPF artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ikiru-so
           path: target/deploy/ikiru.so
+
