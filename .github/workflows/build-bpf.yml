@@ -23,7 +23,8 @@ jobs:
         run: |
           curl -sSfL https://release.solana.com/v1.18.26/install/solana-install-init.sh \
             | sh -s v1.18.26
-          source ~/.profile
+          # asegúrate de que el binario cargo-build-bpf esté en el PATH
+          export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -35,6 +36,13 @@ jobs:
 
       - name: Build Anchor program
         run: anchor build
+
+      - name: Debug: list build outputs
+        run: |
+          echo "=== root/target ==="
+          ls -R target || true
+          echo "=== programs/ikiru/target ==="
+          ls -R programs/ikiru/target || true
 
       - name: Upload BPF artifact
         uses: actions/upload-artifact@v4
