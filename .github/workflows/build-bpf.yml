@@ -23,7 +23,6 @@ jobs:
         run: |
           curl -sSfL https://release.solana.com/v1.18.26/install/solana-install-init.sh \
             | sh -s v1.18.26
-          # asegúrate de que el binario cargo-build-bpf esté en el PATH
           export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 
       - name: Setup Node.js
@@ -39,7 +38,7 @@ jobs:
 
       - name: Debug: list build outputs
         run: |
-          echo "=== root/target ==="
+          echo "=== raíz target ==="
           ls -R target || true
           echo "=== programs/ikiru/target ==="
           ls -R programs/ikiru/target || true
